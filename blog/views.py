@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from blog.models import Post, Comment
 from django.core.paginator import Paginator,PageNotAnInteger, EmptyPage
 from blog.forms import CommentForm
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 def blog_view(request,**kwargs):
     posts = Post.objects.filter(status=1)
@@ -27,13 +30,6 @@ def blog_view(request,**kwargs):
     context = { 'posts': posts }
     return render(request, 'blog/blog-home.html', context)
 
-
-# def blog_single(request,pid):
-#     posts = Post.objects.filter(status=1)
-#     post = get_object_or_404(posts, pk=pid)
-#     comments = Comment.objects.filter(post=post.id,approved=True)
-#     context = {'post': post,'comments': comments}
-#     return render(request, 'blog/blog-single.html', context)
 
 def blog_single(request,pid):
     if request.method == 'POST':
